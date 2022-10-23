@@ -1,0 +1,17 @@
+plugins {
+    id 'java'
+}
+
+group 'com.github.polydome'
+version 'unspecified'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':domain')
+    implementation project(':remote-backup')
+    implementation project(':local-backup')
+    implementation project(':data')
+}
