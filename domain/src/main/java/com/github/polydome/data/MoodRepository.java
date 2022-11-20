@@ -4,6 +4,7 @@ import com.github.polydome.model.Emotion;
 import com.github.polydome.model.Mood;
 import com.github.polydome.model.MoodEntry;
 
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -41,6 +42,7 @@ public interface MoodRepository {
     /**
      * Retrieves all known emotions
      * @return List of emotions
+     * @throws SQLException
      */
-    List<Emotion> findReportedEmotions();
+    List<Emotion> findReportedEmotions() throws SQLException;
 }
