@@ -1,6 +1,8 @@
 package com.github.polydome.data.ormlite.entity;
 
+import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "moods")
@@ -13,6 +15,20 @@ public class MoodEntity {
 
     @DatabaseField
     private String note;
+
+    @ForeignCollectionField(eager = false)
+    private ForeignCollection<MoodEmotionEntity> moodEmotions;
+
+    @ForeignCollectionField(eager = false)
+    private ForeignCollection<MoodEntryEntity> moodEntries;
+
+    public ForeignCollection<MoodEmotionEntity> getMoodEmotions() {
+        return moodEmotions;
+    }
+
+    public void setMoodEmotions(ForeignCollection<MoodEmotionEntity> moodEmotions) {
+        this.moodEmotions = moodEmotions;
+    }
 
     public int getId() {
         return id;
