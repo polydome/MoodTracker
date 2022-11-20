@@ -7,7 +7,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "moods")
 public class MoodEntity {
-    @DatabaseField(generatedId = true)
+    @DatabaseField(generatedId = true, canBeNull = false)
     private int id;
 
     @DatabaseField(canBeNull = false)

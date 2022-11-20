@@ -5,10 +5,10 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "mood_emotion")
 public class MoodEmotionEntity {
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, canBeNull = false)
     private MoodEntity mood;
 
-    @DatabaseField(foreign = true)
+    @DatabaseField(foreign = true, canBeNull = false)
     private EmotionEntity emotion;
 
     public MoodEntity getMood() {
