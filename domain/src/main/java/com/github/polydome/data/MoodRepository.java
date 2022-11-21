@@ -15,8 +15,9 @@ public interface MoodRepository {
      *
      * @param dateTime A datetime that the mood will be reported at
      * @param mood A mood to be reported
+     * @throws SQLException
      */
-    void insert(LocalDateTime dateTime, Mood mood);
+    void insert(LocalDateTime dateTime, Mood mood) throws SQLException;
 
     /**
      * Retrieves all mood scores that were reported within a period.
