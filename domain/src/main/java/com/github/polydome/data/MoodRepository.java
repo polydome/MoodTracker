@@ -25,8 +25,9 @@ public interface MoodRepository {
      * @param periodStart The latest point in time to be considered
      * @param periodEnd The earliest point in time to be considered
      * @return A list of applicable entries
+     * @throws SQLException
      */
-    List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd);
+    List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) throws SQLException;
 
     /**
      * Inserts all entries contained in passed list to database.

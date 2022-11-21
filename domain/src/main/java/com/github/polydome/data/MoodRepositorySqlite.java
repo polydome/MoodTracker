@@ -86,9 +86,19 @@ public class MoodRepositorySqlite implements MoodRepository {
     }
 
     @Override
-    public List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) throws SQLException {
+        Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
+
+        var query = moodEntryEntityDao.queryBuilder();
+        query.where().gt("dateTime", DateUtil.fromLocalDateTime(periodStart)).and().lt("dateTime", DateUtil.fromLocalDateTime(periodEnd));
+
+        List<MoodEntry> moodEntries = new ArrayList<>();
+        List<MoodEntryEntity> moodEntryEntities = query.query();
+        moodEntryEntities.forEach(moodEntryEntity -> {
+            moodEntries.add(moodEntryEntity.toMoodEntry());
+        });
+
+        return moodEntries;
     }
 
     @Override
