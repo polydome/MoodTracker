@@ -32,7 +32,7 @@ public class MoodRepositorySqlite implements MoodRepository {
         Date date = DateUtil.fromLocalDateTime(dateTime);
 
         MoodEntity moodEntity = saveMood(mood);
-        createMoodEntry(moodEntity, date, moodEntity);
+        createMoodEntry(moodEntity, date);
     }
 
     private MoodEntity saveMood(Mood mood) throws SQLException {
@@ -75,7 +75,7 @@ public class MoodRepositorySqlite implements MoodRepository {
         moodEmotionEntitydDao.create(moodEmotionEntities);
     }
 
-    private MoodEntryEntity createMoodEntry(MoodEntity moodEntity, Date date, MoodEntity mood) throws SQLException {
+    private MoodEntryEntity createMoodEntry(MoodEntity moodEntity, Date date) throws SQLException {
         MoodEntryEntity moodEntryEntity = new MoodEntryEntity();
         moodEntryEntity.setMood(moodEntity);
         moodEntryEntity.setDateTime(date);
@@ -121,6 +121,8 @@ public class MoodRepositorySqlite implements MoodRepository {
      * @throws SQLException
      */
     private void insertNewEmotions(List<Emotion> emotions) throws SQLException {
+        emotions = new ArrayList<>(emotions); // Copy list, so original reference remians unchanged
+
         Dao<EmotionEntity, Integer> dao = DaoManager.createDao(connection.getConnectionSource(), EmotionEntity.class);
 
         // Get existing emotion entities
