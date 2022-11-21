@@ -1,5 +1,6 @@
 package com.github.polydome.data.ormlite.entity;
 
+import com.github.polydome.model.Emotion;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -38,6 +39,10 @@ public class EmotionEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Emotion toEmotion() {
+        return new Emotion(getId(), getName());
     }
 
 }

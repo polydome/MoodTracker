@@ -1,5 +1,10 @@
 package com.github.polydome.data.ormlite.entity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.github.polydome.model.Emotion;
+import com.github.polydome.model.Mood;
 import com.j256.ormlite.dao.ForeignCollection;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
@@ -52,5 +57,15 @@ public class MoodEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Mood toMood() {
+        List<Emotion> emotions = new ArrayList<>();
+
+        moodEmotions.forEach(moodEmotion -> {
+            emotions.add(moodEmotion.getEmotion().toEmotion());
+        });
+
+        return new Mood(id, score, emotions, note);
     }
 }

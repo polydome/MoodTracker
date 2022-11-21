@@ -37,8 +37,9 @@ public interface MoodRepository {
     /**
      * Retrieves all mood entries that were ever inserted.
      * @return List of mood entries
+     * @throws SQLException
      */
-    List<MoodEntry> findAllEntries();
+    List<MoodEntry> findAllEntries() throws SQLException;
 
     /**
      * Retrieves all known emotions

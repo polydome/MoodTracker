@@ -98,9 +98,17 @@ public class MoodRepositorySqlite implements MoodRepository {
     }
 
     @Override
-    public List<MoodEntry> findAllEntries() {
-        // TODO Auto-generated method stub
-        return null;
+    public List<MoodEntry> findAllEntries() throws SQLException {
+        Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
+
+        List<MoodEntry> moodEntries = new ArrayList<>();
+        List<MoodEntryEntity> moodEntryEntities = moodEntryEntityDao.queryForAll();
+        moodEntryEntities.forEach(moodEntryEntity -> {
+            moodEntries.add(moodEntryEntity.toMoodEntry());
+        });
+
+        return moodEntries;
+
     }
 
     @Override
