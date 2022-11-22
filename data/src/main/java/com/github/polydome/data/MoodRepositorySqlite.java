@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.github.polydome.data.exception.SQLRuntimeException;
 import com.github.polydome.data.ormlite.Connection;
 import com.github.polydome.data.ormlite.ConnectionManager;
 import com.github.polydome.data.ormlite.entity.EmotionEntity;
@@ -25,18 +26,34 @@ import com.j256.ormlite.stmt.DeleteBuilder;
 public class MoodRepositorySqlite implements MoodRepository {
     private Connection connection;
 
-    public MoodRepositorySqlite() throws SQLException {
-        connection = ConnectionManager.getInstance().getConnection();
+    public MoodRepositorySqlite() {
+        try {
+            connection = ConnectionManager.getInstance().getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't initialize database connection", e);
+        }
     }
 
     @Override
-    public void insert(LocalDateTime dateTime, Mood mood) throws SQLException {
-        Date date = DateUtil.fromLocalDateTime(dateTime);
+    public void insert(LocalDateTime dateTime, Mood mood) {
+        try {
+            Date date = DateUtil.fromLocalDateTime(dateTime);
 
-        MoodEntity moodEntity = saveMood(mood);
-        createMoodEntryEntity(moodEntity, date);
+            MoodEntity moodEntity = saveMood(mood);
+            createMoodEntryEntity(moodEntity, date);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't insert mood into database", e);
+        }
     }
 
+    /**
+     * Creates MoodEntity object, then perists it in database
+     * @param mood
+     * @return Persisted object
+     * @throws SQLException
+     */
     private MoodEntity saveMood(Mood mood) throws SQLException {
         MoodEntity moodEntity = new MoodEntity();
         moodEntity.setId(mood.getId()); // If id == 0, create new record
@@ -49,6 +66,12 @@ public class MoodRepositorySqlite implements MoodRepository {
         return moodEntity;
     }
 
+    /**
+     * Adds EmotionEntity objects based of list of Emotion, and then creates realtionship between those and EmotionEntity
+     * @param moodEntity
+     * @param emotions
+     * @throws SQLException
+     */
     private void addEmotionsToMoodEntity(MoodEntity moodEntity, List<Emotion> emotions) throws SQLException {
         Dao<EmotionEntity, Integer> emotionEntityDao = DaoManager.createDao(connection.getConnectionSource(), EmotionEntity.class);
         Dao<MoodEmotionEntity, Integer> moodEmotionEntitydDao = DaoManager.createDao(connection.getConnectionSource(), MoodEmotionEntity.class);
@@ -77,6 +100,13 @@ public class MoodRepositorySqlite implements MoodRepository {
         moodEmotionEntitydDao.create(moodEmotionEntities);
     }
 
+    /**
+     * Persists MoodEntity object into database, with all of its relations
+     * @param moodEntity - Entity of Mood model
+     * @param date - Date, normalized
+     * @return
+     * @throws SQLException
+     */
     private MoodEntryEntity createMoodEntryEntity(MoodEntity moodEntity, Date date) throws SQLException {
         MoodEntryEntity moodEntryEntity = new MoodEntryEntity();
         moodEntryEntity.setMood(moodEntity);
@@ -87,6 +117,12 @@ public class MoodRepositorySqlite implements MoodRepository {
         return moodEntryEntity;
     }
 
+    /**
+     * Saves MoodEntry object into database
+     * @param moodEntry - model MoodEntry
+     * @return - encja obiektu MoodEntry
+     * @throws SQLException
+     */
     private MoodEntryEntity saveMoodEntry(MoodEntry moodEntry) throws SQLException {
         // Handle emotions
         @NotNull List<Emotion> emotions = moodEntry.getMood().getEmotions();
@@ -108,57 +144,78 @@ public class MoodRepositorySqlite implements MoodRepository {
     }
 
     @Override
-    public List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) throws SQLException {
-        Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
+    public List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
+        try {
+            Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
 
-        var query = moodEntryEntityDao.queryBuilder();
-        query.where().gt("dateTime", DateUtil.fromLocalDateTime(periodStart)).and().lt("dateTime", DateUtil.fromLocalDateTime(periodEnd));
+            var query = moodEntryEntityDao.queryBuilder();
+            query.where().gt("dateTime", DateUtil.fromLocalDateTime(periodStart)).and().lt("dateTime", DateUtil.fromLocalDateTime(periodEnd));
 
-        List<MoodEntry> moodEntries = new ArrayList<>();
-        List<MoodEntryEntity> moodEntryEntities = query.query();
-        moodEntryEntities.forEach(moodEntryEntity -> {
-            moodEntries.add(moodEntryEntity.toMoodEntry());
-        });
+            List<MoodEntry> moodEntries = new ArrayList<>();
+            List<MoodEntryEntity> moodEntryEntities = query.query();
+            moodEntryEntities.forEach(moodEntryEntity -> {
+                moodEntries.add(moodEntryEntity.toMoodEntry());
+            });
 
-        return moodEntries;
-    }
-
-    @Override
-    public void merge(List<MoodEntry> entries) throws SQLException {
-        for (MoodEntry entry : entries) {
-            saveMoodEntry(entry);
+            return moodEntries;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't resolve find query", e);
         }
     }
 
     @Override
-    public List<MoodEntry> findAllEntries() throws SQLException {
-        Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
+    public void merge(List<MoodEntry> entries) {
+        try {
+            for (MoodEntry entry : entries) {
+                saveMoodEntry(entry);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't merge records", e);
+        }
+    }
 
-        List<MoodEntry> moodEntries = new ArrayList<>();
-        List<MoodEntryEntity> moodEntryEntities = moodEntryEntityDao.queryForAll();
-        moodEntryEntities.forEach(moodEntryEntity -> {
-            moodEntries.add(moodEntryEntity.toMoodEntry());
-        });
+    @Override
+    public List<MoodEntry> findAllEntries() {
+        try {
+            Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
 
-        return moodEntries;
+            List<MoodEntry> moodEntries = new ArrayList<>();
+            List<MoodEntryEntity> moodEntryEntities = moodEntryEntityDao.queryForAll();
+            moodEntryEntities.forEach(moodEntryEntity -> {
+                moodEntries.add(moodEntryEntity.toMoodEntry());
+            });
+
+            return moodEntries;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't resolve find query", e);
+        }
 
     }
 
     @Override
-    public List<Emotion> findReportedEmotions() throws SQLException {
-        List<Emotion> emotions = new ArrayList<Emotion>();
+    public List<Emotion> findReportedEmotions() {
+        try {
+            List<Emotion> emotions = new ArrayList<Emotion>();
 
-        Dao<EmotionEntity, Integer> dao = DaoManager.createDao(connection.getConnectionSource(), EmotionEntity.class);
-        List<EmotionEntity> entities = dao.queryForAll();
-        entities.forEach((n) -> {
-            emotions.add(new Emotion(n.getId(), n.getName()));
-        });
+            Dao<EmotionEntity, Integer> dao = DaoManager.createDao(connection.getConnectionSource(), EmotionEntity.class);
+            List<EmotionEntity> entities = dao.queryForAll();
+            entities.forEach((n) -> {
+                emotions.add(new Emotion(n.getId(), n.getName()));
+            });
 
-        return emotions;
+            return emotions;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new SQLRuntimeException("Couldn't resolve find query", e);
+        }
     }
 
     /**
-     * Inserts new emotions from list of all emotions
+     * Inserts new emotions from list of all emotions, doesn't add emotions that already exists, that is have the same name
+     * @param emotions - List of Emotion objects to insert
      * @throws SQLException
      */
     private void insertNewEmotions(List<Emotion> emotions) throws SQLException {
