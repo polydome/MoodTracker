@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.jetbrains.annotations.NotNull;
+
 import com.github.polydome.data.ormlite.Connection;
 import com.github.polydome.data.ormlite.ConnectionManager;
 import com.github.polydome.data.ormlite.entity.EmotionEntity;
@@ -32,7 +34,7 @@ public class MoodRepositorySqlite implements MoodRepository {
         Date date = DateUtil.fromLocalDateTime(dateTime);
 
         MoodEntity moodEntity = saveMood(mood);
-        createMoodEntry(moodEntity, date);
+        createMoodEntryEntity(moodEntity, date);
     }
 
     private MoodEntity saveMood(Mood mood) throws SQLException {
@@ -75,12 +77,32 @@ public class MoodRepositorySqlite implements MoodRepository {
         moodEmotionEntitydDao.create(moodEmotionEntities);
     }
 
-    private MoodEntryEntity createMoodEntry(MoodEntity moodEntity, Date date) throws SQLException {
+    private MoodEntryEntity createMoodEntryEntity(MoodEntity moodEntity, Date date) throws SQLException {
         MoodEntryEntity moodEntryEntity = new MoodEntryEntity();
         moodEntryEntity.setMood(moodEntity);
         moodEntryEntity.setDateTime(date);
         Dao<MoodEntryEntity, Integer> moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
         moodEntryEntityDao.create(moodEntryEntity);
+
+        return moodEntryEntity;
+    }
+
+    private MoodEntryEntity saveMoodEntry(MoodEntry moodEntry) throws SQLException {
+        // Handle emotions
+        @NotNull List<Emotion> emotions = moodEntry.getMood().getEmotions();
+        insertNewEmotions(emotions);
+
+        // Handle mood
+        @NotNull Mood mood = moodEntry.getMood();
+        MoodEntity moodEntity = saveMood(mood);
+
+        // Handle mood entry
+        MoodEntryEntity moodEntryEntity = new MoodEntryEntity();
+        moodEntryEntity.setDateTime(DateUtil.fromLocalDateTime(moodEntry.getDateTime()));
+        moodEntryEntity.setId(moodEntry.getId());
+        moodEntryEntity.setMood(moodEntity);
+        var moodEntryEntityDao = DaoManager.createDao(connection.getConnectionSource(), MoodEntryEntity.class);
+        moodEntryEntityDao.createOrUpdate(moodEntryEntity);
 
         return moodEntryEntity;
     }
@@ -102,9 +124,10 @@ public class MoodRepositorySqlite implements MoodRepository {
     }
 
     @Override
-    public void merge(List<MoodEntry> entries) {
-        // TODO Auto-generated method stub
-        
+    public void merge(List<MoodEntry> entries) throws SQLException {
+        for (MoodEntry entry : entries) {
+            saveMoodEntry(entry);
+        }
     }
 
     @Override

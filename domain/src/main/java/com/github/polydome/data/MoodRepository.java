@@ -32,8 +32,9 @@ public interface MoodRepository {
     /**
      * Inserts all entries contained in passed list to database.
      * @param entries List of entries to be inserted
+     * @throws SQLException
      */
-    void merge(List<MoodEntry> entries);
+    void merge(List<MoodEntry> entries) throws SQLException;
 
     /**
      * Retrieves all mood entries that were ever inserted.
