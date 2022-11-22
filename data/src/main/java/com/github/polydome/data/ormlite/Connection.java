@@ -9,9 +9,17 @@ import com.github.polydome.data.ormlite.entity.MoodEntryEntity;
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 
+/**
+ * Helper class that initializes database connection and holds its information
+ */
 public class Connection {
     private JdbcPooledConnectionSource connectionSource;
 
+    /**
+     * Default construcotr
+     * @param url path to database file
+     * @throws SQLException
+     */
     public Connection(String url) throws SQLException {
         connectionSource = new JdbcPooledConnectionSource("jdbc:sqlite:" + url);
         initDb();

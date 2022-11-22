@@ -6,6 +6,9 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/**
+ * Entity class of Emotion
+ */
 @DatabaseTable(tableName = "emotions")
 public class EmotionEntity {
     @DatabaseField(generatedId = true, canBeNull = false)
@@ -41,6 +44,10 @@ public class EmotionEntity {
         this.name = name;
     }
 
+    /**
+     * Translates entity to model
+     * @return Emotion model
+     */
     public Emotion toEmotion() {
         return new Emotion(getId(), getName());
     }

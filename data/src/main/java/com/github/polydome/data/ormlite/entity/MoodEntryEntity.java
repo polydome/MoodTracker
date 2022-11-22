@@ -7,6 +7,9 @@ import com.github.polydome.model.MoodEntry;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/**
+ * Entity class of MoodEntry
+ */
 @DatabaseTable(tableName = "mood_entries")
 public class MoodEntryEntity {
     @DatabaseField(generatedId = true, canBeNull = false)
@@ -42,6 +45,10 @@ public class MoodEntryEntity {
         this.mood = mood;
     }
 
+    /**
+     * Translated entity to model
+     * @return model MoodEntry
+     */
     public MoodEntry toMoodEntry() {
         return new MoodEntry(getId(), DateUtil.fromDate(getDateTime()), getMood().toMood());
     }

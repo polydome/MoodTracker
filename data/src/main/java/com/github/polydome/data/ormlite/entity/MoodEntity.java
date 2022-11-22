@@ -10,6 +10,9 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
+/**
+ * Entity Class of Mood
+ */
 @DatabaseTable(tableName = "moods")
 public class MoodEntity {
     @DatabaseField(generatedId = true, canBeNull = false)
@@ -59,6 +62,10 @@ public class MoodEntity {
         this.note = note;
     }
 
+    /**
+     * Translates entity to model
+     * @return Mood model
+     */
     public Mood toMood() {
         List<Emotion> emotions = new ArrayList<>();
 
