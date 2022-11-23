@@ -30,7 +30,6 @@ public class MoodRepositorySqlite implements MoodRepository {
         try {
             connection = ConnectionManager.getInstance().getConnection();
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't initialize database connection", e);
         }
     }
@@ -43,7 +42,6 @@ public class MoodRepositorySqlite implements MoodRepository {
             MoodEntity moodEntity = saveMood(mood);
             createMoodEntryEntity(moodEntity, date);
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't insert mood into database", e);
         }
     }
@@ -89,7 +87,7 @@ public class MoodRepositorySqlite implements MoodRepository {
             // Get emotion entity with that name
             EmotionEntity emotionEntity = knownEmotionEntities.stream().filter(knownEmotionEntity -> knownEmotionEntity.getName().equals(emotion.getName())).findAny().get();
             if (emotionEntity == null) { // Should not ever happen, but still - for safety
-                return;
+                throw new IllegalStateException("Tried to add emotion that doesn't exist");
             }
             MoodEmotionEntity moodEmotionEntity = new MoodEmotionEntity();
             moodEmotionEntity.setEmotion(emotionEntity);
@@ -159,7 +157,6 @@ public class MoodRepositorySqlite implements MoodRepository {
 
             return moodEntries;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't resolve find query", e);
         }
     }
@@ -171,7 +168,6 @@ public class MoodRepositorySqlite implements MoodRepository {
                 saveMoodEntry(entry);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't merge records", e);
         }
     }
@@ -189,7 +185,6 @@ public class MoodRepositorySqlite implements MoodRepository {
 
             return moodEntries;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't resolve find query", e);
         }
 
@@ -208,7 +203,6 @@ public class MoodRepositorySqlite implements MoodRepository {
 
             return emotions;
         } catch (SQLException e) {
-            e.printStackTrace();
             throw new SQLRuntimeException("Couldn't resolve find query", e);
         }
     }
