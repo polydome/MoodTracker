@@ -26,12 +26,21 @@ fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Header("Rate your mood")
         MoodPicker()
+
+        Spacer(
+            modifier = Modifier.height(32.dp)
+        )
+
         Header("Select your emotions")
         Text("Emotions")
+
+        Spacer(
+            modifier = Modifier.height(64.dp)
+        )
 
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
