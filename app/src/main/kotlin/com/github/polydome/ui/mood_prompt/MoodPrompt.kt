@@ -12,8 +12,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.github.polydome.ui.app.AppButton
-import com.github.polydome.ui.app.AppHeader
+import com.github.polydome.ui.widget.ActionButton
+import com.github.polydome.ui.widget.Header
 
 
 @Composable
@@ -23,8 +23,8 @@ fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        AppHeader("Rate your mood")
-        AppHeader("Select your emotions")
+        Header("Rate your mood")
+        Header("Select your emotions")
         Text("Emotions")
 
         Row(
@@ -32,8 +32,8 @@ fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
             modifier = Modifier
                 .width(240.dp)
         ) {
-            AppButton(onClick = switchTab, icon = Icons.Filled.Close)
-            AppButton(onClick = {}, icon = Icons.Filled.Done)
+            ActionButton(onClick = switchTab, icon = Icons.Filled.Close)
+            ActionButton(onClick = {}, icon = Icons.Filled.Done)
         }
     }
 }
