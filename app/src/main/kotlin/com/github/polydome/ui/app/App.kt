@@ -20,13 +20,11 @@ enum class Tab {
     Prompt
 }
 
-@OptIn(ExperimentalMaterialApi::class)
 @Composable
 @Preview
 fun App() {
     MaterialTheme {
         Column(Modifier.padding(64.dp)) {
-            val openDialog = remember { mutableStateOf(false) }
             var tab by remember { mutableStateOf(Tab.Button) }
 
             MoodCalendar(CalendarViewModel())
@@ -50,37 +48,7 @@ fun App() {
                     }
                 }
             }
-
-
-
-            if (openDialog.value) {
-                AlertDialog(onDismissRequest = {
-                    // Dismiss the dialog when the user clicks outside the dialog or on the back
-                    // button. If you want to disable that functionality, simply use an empty
-                    // onCloseRequest.
-                    openDialog.value = false
-                }, title = {
-                    Text(text = "Dialog Title")
-                }, text = {
-                    Text("Here is a text ")
-                }, confirmButton = {
-                    Button(
-
-                        onClick = {
-                            openDialog.value = false
-                        }) {
-                        Text("Add")
-                    }
-                }, dismissButton = {
-                    Button(onClick = {
-                        openDialog.value = false
-                    }) {
-                        Text("Close")
-                    }
-                })
-            }
         }
-
     }
 }
 
