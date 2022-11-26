@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -41,15 +44,24 @@ fun App() {
                                 tab = Tab.Prompt
                             }
                         )
-
-                        Tab.Prompt -> PromptView(switchTab = {
-                            tab = Tab.Button
-                        })
+                        Tab.Prompt -> PromptView(
+                            modifier = Modifier
+                                .align(Alignment.Center)
+                                .fillMaxSize(),
+                            switchTab = {
+                                tab = Tab.Button
+                            }
+                        )
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun AppHeader(text: String) {
+    Text(text, fontSize = 32.sp, fontWeight = FontWeight.Light)
 }
 
 @Composable
@@ -59,27 +71,47 @@ fun ButtonView(modifier: Modifier = Modifier, switchTab: () -> Unit) {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Text("How are you?", fontSize = 32.sp, fontWeight = FontWeight.Light)
-        IconButton(
-            onClick = {
-                switchTab()
-            },
-            modifier = Modifier
-                .size(32.dp)
-        ) {
-            Icon(
-                Icons.Filled.Add, "contentDescription", Modifier.fillMaxSize()
-            )
-        }
+        AppHeader("How are you?")
+        AppButton(
+            icon = Icons.Filled.Add,
+            onClick = switchTab
+        )
     }
 }
 
 @Composable
 fun PromptView(modifier: Modifier = Modifier, switchTab: () -> Unit) {
-    Column(modifier = modifier) {
-        Text("The form here")
-        Button(onClick = switchTab) {
-            Text("Back")
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        AppHeader("Rate your mood")
+        AppHeader("Select your emotions")
+        Text("Emotions")
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .width(240.dp)
+        ) {
+            AppButton(onClick = switchTab, icon = Icons.Filled.Close)
+            AppButton(onClick = {}, icon = Icons.Filled.Done)
         }
+    }
+}
+
+@Composable
+fun AppButton(modifier: Modifier = Modifier, onClick: () -> Unit, icon: ImageVector) {
+    IconButton(
+        onClick = onClick,
+        modifier = modifier
+            .size(32.dp)
+    ) {
+        Icon(
+            imageVector = icon,
+            modifier = Modifier.fillMaxSize(),
+            contentDescription = null
+        )
     }
 }
