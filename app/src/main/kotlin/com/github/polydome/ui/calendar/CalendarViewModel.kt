@@ -1,4 +1,4 @@
-package com.github.polydome.ui
+package com.github.polydome.ui.calendar
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

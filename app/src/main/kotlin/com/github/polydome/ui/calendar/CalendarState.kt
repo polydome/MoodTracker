@@ -1,4 +1,4 @@
-package com.github.polydome.ui
+package com.github.polydome.ui.calendar
 
 data class CalendarState(
     val lastDayOfMonth: Int = 30,

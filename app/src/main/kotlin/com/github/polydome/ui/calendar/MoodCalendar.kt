@@ -1,4 +1,4 @@
-package com.github.polydome.ui
+package com.github.polydome.ui.calendar
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
