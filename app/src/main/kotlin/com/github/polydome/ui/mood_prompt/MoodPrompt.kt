@@ -14,7 +14,7 @@ import com.github.polydome.ui.widget.Header
 
 
 @Composable
-fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
+fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit, viewModel: MoodPromptViewModel = MoodPromptViewModel()) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -22,7 +22,7 @@ fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
     ) {
         Header("Rate your mood")
         MoodPicker(
-            onMoodPicked = {}
+            onMoodPicked = viewModel::selectMoodValue
         )
 
         Spacer(
@@ -42,7 +42,7 @@ fun MoodPrompt(modifier: Modifier = Modifier, switchTab: () -> Unit) {
                 .width(240.dp)
         ) {
             ActionButton(onClick = switchTab, icon = Icons.Filled.Close)
-            ActionButton(onClick = {}, icon = Icons.Filled.Done)
+            ActionButton(onClick = viewModel::submitPrompt, icon = Icons.Filled.Done)
         }
     }
 }
