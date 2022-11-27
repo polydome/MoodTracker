@@ -5,15 +5,18 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.input.key.key
+import androidx.compose.ui.input.key.onPreviewKeyEvent
 import androidx.compose.ui.unit.dp
 import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
+import com.google.accompanist.flowlayout.FlowMainAxisAlignment
 import com.google.accompanist.flowlayout.FlowRow
 
 
@@ -49,6 +52,14 @@ fun MoodPrompt(
         )
 
         Spacer(
+            modifier = Modifier.height(16.dp)
+        )
+
+        CustomEmotionPrompt(
+            onSubmit = viewModel::addEmotion
+        )
+
+        Spacer(
             modifier = Modifier.height(64.dp)
         )
 
@@ -65,9 +76,14 @@ fun MoodPrompt(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EmotionsPicker(modifier: Modifier = Modifier, emotions: List<MoodPromptState.Emotion>, onEmotionSelected: (index: Int) -> Unit) {
-    FlowRow (
-        modifier = modifier
+private fun EmotionsPicker(
+    modifier: Modifier = Modifier,
+    emotions: List<MoodPromptState.Emotion>,
+    onEmotionSelected: (index: Int) -> Unit
+) {
+    FlowRow(
+        modifier = modifier,
+        mainAxisAlignment = FlowMainAxisAlignment.Center
     ) {
         emotions.forEachIndexed { index, emotion ->
             Chip(
@@ -81,4 +97,24 @@ fun EmotionsPicker(modifier: Modifier = Modifier, emotions: List<MoodPromptState
             }
         }
     }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+private fun CustomEmotionPrompt(onSubmit: (emotionName: String) -> Unit) {
+    var text by remember { mutableStateOf("") }
+    OutlinedTextField(
+        modifier = Modifier.onPreviewKeyEvent {
+            if (it.key == Key.Enter) {
+                onSubmit(text)
+                text = ""
+                return@onPreviewKeyEvent true
+            }
+            return@onPreviewKeyEvent false
+        },
+        value = text,
+        onValueChange = { value: String -> text = value },
+        maxLines = 1,
+        placeholder = { Text("Other emotion...") }
+    )
 }

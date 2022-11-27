@@ -33,6 +33,15 @@ class MoodPromptViewModel {
             }
         )
     }
+
+    fun addEmotion(emotionName: String) {
+        _state.value = _state.value.copy(
+            emotions = _state.value.emotions + MoodPromptState.Emotion(
+                name = emotionName,
+                selected = false
+            )
+        )
+    }
 }
 
 private fun placeholderEmotions() = listOf(
