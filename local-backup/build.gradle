@@ -11,4 +11,8 @@ repositories {
 
 dependencies {
     implementation project(':domain')
+    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
+    implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
+    implementation group: 'com.fasterxml.jackson.datatype', name: 'jackson-datatype-jsr310', version: '2.14.1'
+    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-csv', version: '2.14.1'
 }
