@@ -1,7 +1,6 @@
 package com.github.polydome.ui.mood_prompt
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
+import com.google.accompanist.flowlayout.FlowRow
 
 
 @Composable
@@ -40,7 +40,13 @@ fun MoodPrompt(
         )
 
         Header("Select your emotions")
-        EmotionsPicker(state.emotions, onEmotionSelected = viewModel::toggleEmotion)
+        EmotionsPicker(
+            modifier = Modifier
+                .fillMaxWidth(0.65f)
+                .align(Alignment.CenterHorizontally),
+            emotions = state.emotions,
+            onEmotionSelected = viewModel::toggleEmotion
+        )
 
         Spacer(
             modifier = Modifier.height(64.dp)
@@ -59,12 +65,11 @@ fun MoodPrompt(
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun EmotionsPicker(emotions: List<MoodPromptState.Emotion>, onEmotionSelected: (index: Int) -> Unit) {
-    LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+fun EmotionsPicker(modifier: Modifier = Modifier, emotions: List<MoodPromptState.Emotion>, onEmotionSelected: (index: Int) -> Unit) {
+    FlowRow (
+        modifier = modifier
     ) {
-        items(emotions.size) { index ->
-            val emotion = emotions[index]
+        emotions.forEachIndexed { index, emotion ->
             Chip(
                 onClick = {
                     onEmotionSelected(index)
