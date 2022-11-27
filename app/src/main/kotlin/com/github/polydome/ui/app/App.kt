@@ -15,6 +15,7 @@ import com.github.polydome.ui.widget.Header
 import com.github.polydome.ui.calendar.CalendarViewModel
 import com.github.polydome.ui.calendar.MoodCalendar
 import com.github.polydome.ui.mood_prompt.MoodPrompt
+import com.github.polydome.ui.mood_prompt.MoodPromptViewModel
 
 enum class Tab {
     Button,
@@ -45,7 +46,8 @@ fun App() {
                                 .fillMaxSize(),
                             switchTab = {
                                 tab = Tab.Button
-                            }
+                            },
+                            MoodPromptViewModel()
                         )
                     }
                 }
