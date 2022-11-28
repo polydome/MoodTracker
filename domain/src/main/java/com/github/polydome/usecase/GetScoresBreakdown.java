@@ -1,8 +1,6 @@
 package com.github.polydome.usecase;
 
 import com.github.polydome.data.MoodRepository;
-import com.github.polydome.model.Emotion;
-import com.github.polydome.model.Mood;
 import com.github.polydome.model.MoodEntry;
 
 import org.jetbrains.annotations.NotNull;
@@ -64,45 +62,5 @@ public class GetScoresBreakdown {
         YearMonth yearMonthObject = YearMonth.of(currentYear, currentMonth);
         int daysInMonth = yearMonthObject.lengthOfMonth();
         return daysInMonth;
-    }
-
-    public static void main(String[] args) {
-        MoodRepository moodRepo = new MoodRepository() {
-
-            @Override
-            public void insert(LocalDateTime dateTime, Mood mood) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public List<MoodEntry> findEntriesReportedWithinPeriod(LocalDateTime periodStart, LocalDateTime periodEnd) {
-                // TODO Auto-generated method stub
-                return List
-                        .of(new MoodEntry(1, LocalDateTime.of(2022, 11, 23, 0, 0, 0), new Mood(1, 3, List.of(), null)));
-            }
-
-            @Override
-            public void merge(List<MoodEntry> entries) {
-                // TODO Auto-generated method stub
-
-            }
-
-            @Override
-            public List<MoodEntry> findAllEntries() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-            @Override
-            public List<Emotion> findReportedEmotions() {
-                // TODO Auto-generated method stub
-                return null;
-            }
-
-        };
-        GetScoresBreakdown getscores = new GetScoresBreakdown(moodRepo);
-        getscores.execute(2022, 11);
-        System.out.println(getscores.execute(2022, 11));
     }
 }
