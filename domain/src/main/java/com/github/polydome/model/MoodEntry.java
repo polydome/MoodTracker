@@ -2,8 +2,16 @@ package com.github.polydome.model;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+import lombok.Builder;
+
 import java.time.LocalDateTime;
 
+
+@Builder
+@JsonDeserialize(builder = MoodEntry.MoodEntryBuilder.class)
 public class MoodEntry {
     private final int id;
     @NotNull private final LocalDateTime dateTime;
@@ -25,5 +33,10 @@ public class MoodEntry {
 
     public int getId() {
         return id;
+    }
+
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class MoodEntryBuilder {
+
     }
 }

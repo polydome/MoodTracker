@@ -3,8 +3,15 @@ package com.github.polydome.model;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
+
+import lombok.Builder;
+
 import java.util.List;
 
+@Builder
+@JsonDeserialize(builder = Mood.MoodBuilder.class)
 public class Mood {
     private final int id;
     private final int score;
@@ -34,5 +41,10 @@ public class Mood {
 
     public @Nullable String getNote() {
         return note;
+    }
+    
+    @JsonPOJOBuilder(withPrefix = "")
+    public static class MoodBuilder {
+
     }
 }
