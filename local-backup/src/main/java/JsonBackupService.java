@@ -12,9 +12,12 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class JsonBackupService implements BackupService {
-
-    private static final String filepath = "json.json";
+    private final String filepath;
     private final ObjectMapper mapper = buildMoodEntryMapper();
+
+    public JsonBackupService(String filePath) {
+        this.filepath = filePath;
+    }
 
     /**
      * Serializes entries into a JSON format and writes to a file.
