@@ -1,10 +1,13 @@
 package com.github.polydome.ui.mood_prompt
 
+import com.github.polydome.usecase.ReportMood
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MoodFormViewModel {
+class MoodFormViewModel(
+    private val reportMood: ReportMood
+) {
     private val _state = MutableStateFlow(
         MoodFormState(
             emotions = placeholderEmotions(),
@@ -20,7 +23,14 @@ class MoodFormViewModel {
     }
 
     fun submitPrompt() {
-        println("Submitting prompt with value = ${_state.value.value}")
+        val state = _state.value
+        if (state.value != null) {
+            reportMood.reportCurrentMood(
+                state.value,
+                state.emotions.map { it.name }.toSet(),
+                null
+            )
+        }
     }
 
     fun toggleEmotion(emotionIndex: Int) {
