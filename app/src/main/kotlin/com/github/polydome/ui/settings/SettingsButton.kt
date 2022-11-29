@@ -38,14 +38,6 @@ fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsVie
             )
 
             SettingsItem(
-                title = "Export to CSV",
-                onClick = {
-                    expanded = false
-//                    settingsViewModel.exportToCsv()
-                }
-            )
-
-            SettingsItem(
                 title = "Export to Google Drive",
                 onClick = {
                     expanded = false
