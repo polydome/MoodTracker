@@ -41,7 +41,6 @@ fun App() {
 
     MaterialTheme {
         Box {
-
             SettingsButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd),
@@ -49,31 +48,8 @@ fun App() {
             )
 
             Column(Modifier.padding(64.dp)) {
-                var tab by remember { mutableStateOf(Tab.Button) }
-
                 MoodCalendar(calendarViewModel)
-
-                Box {
-                    Crossfade(targetState = tab, modifier = Modifier.align(Alignment.Center)) { currentTab ->
-                        when (currentTab) {
-                            Tab.Button -> ButtonView(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                switchTab = {
-                                    tab = Tab.Prompt
-                                }
-                            )
-                            Tab.Prompt -> MoodPrompt(
-                                modifier = Modifier
-                                    .fillMaxSize(),
-                                switchTab = {
-                                    tab = Tab.Button
-                                },
-                                MoodPromptViewModel()
-                            )
-                        }
-                    }
-                }
+                MoodForm()
             }
 
             NoticesView(
@@ -101,7 +77,7 @@ private fun NoticesView(modifier: Modifier = Modifier, newNotices: Flow<String>)
         }
     }
 
-    LazyColumn (
+    LazyColumn(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -117,7 +93,37 @@ private fun NoticesView(modifier: Modifier = Modifier, newNotices: Flow<String>)
 }
 
 @Composable
-fun ButtonView(modifier: Modifier = Modifier, switchTab: () -> Unit) {
+private fun MoodForm() {
+    Box {
+        var tab by remember { mutableStateOf(Tab.Button) }
+
+        Crossfade(
+            targetState = tab,
+            modifier = Modifier.align(Alignment.Center)
+        ) { currentTab ->
+            when (currentTab) {
+                Tab.Button -> MoodButton(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    switchTab = {
+                        tab = Tab.Prompt
+                    }
+                )
+                Tab.Prompt -> MoodPrompt(
+                    modifier = Modifier
+                        .fillMaxSize(),
+                    switchTab = {
+                        tab = Tab.Button
+                    },
+                    MoodPromptViewModel()
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MoodButton(modifier: Modifier = Modifier, switchTab: () -> Unit) {
     Column(
         modifier = modifier,
         horizontalAlignment = Alignment.CenterHorizontally,
