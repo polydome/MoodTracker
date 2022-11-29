@@ -20,9 +20,12 @@ import com.github.polydome.ui.settings.SettingsButton
 import com.github.polydome.ui.settings.SettingsViewModel
 import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.swing.JFileChooser
+import kotlin.time.Duration.Companion.seconds
 
 enum class Tab {
     Button,
@@ -39,6 +42,10 @@ fun App() {
     coroutineScope.launch {
         settingsViewModel.notices.collect {
             visibleNotices.add(it)
+            launch(Dispatchers.Default) {
+                delay(5.seconds)
+                visibleNotices.remove(it)
+            }
         }
     }
 
