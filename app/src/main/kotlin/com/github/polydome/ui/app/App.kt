@@ -3,6 +3,7 @@ package com.github.polydome.ui.app
 import androidx.compose.animation.Crossfade
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -14,10 +15,12 @@ import com.github.polydome.ui.calendar.CalendarViewModel
 import com.github.polydome.ui.calendar.MoodCalendar
 import com.github.polydome.ui.mood_prompt.MoodPrompt
 import com.github.polydome.ui.mood_prompt.MoodPromptViewModel
+import com.github.polydome.ui.settings.Notice
 import com.github.polydome.ui.settings.SettingsButton
 import com.github.polydome.ui.settings.SettingsViewModel
 import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
+import kotlinx.coroutines.launch
 
 enum class Tab {
     Button,
@@ -27,12 +30,23 @@ enum class Tab {
 @Composable
 @Preview
 fun App() {
+    val settingsViewModel = SettingsViewModel()
+    val visibleNotices = remember { mutableStateListOf<String>() }
+    val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+        settingsViewModel.notices.collect {
+            visibleNotices.add(it)
+        }
+    }
+
     MaterialTheme {
         Box {
+
             SettingsButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd),
-                SettingsViewModel()
+                settingsViewModel
             )
 
             Column(Modifier.padding(64.dp)) {
@@ -63,6 +77,21 @@ fun App() {
                 }
             }
 
+            LazyColumn (
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                for (notice in visibleNotices) {
+                    item {
+                        Notice(text = notice, onClick = {
+                            visibleNotices.remove(notice)
+                        })
+                    }
+
+                }
+            }
         }
     }
 }
