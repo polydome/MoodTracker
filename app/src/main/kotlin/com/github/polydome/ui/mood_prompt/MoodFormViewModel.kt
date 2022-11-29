@@ -1,12 +1,15 @@
 package com.github.polydome.ui.mood_prompt
 
+import com.github.polydome.ui.event.DataEvent
+import com.github.polydome.ui.event.Sink
 import com.github.polydome.usecase.ReportMood
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 class MoodFormViewModel(
-    private val reportMood: ReportMood
+    private val reportMood: ReportMood,
+    private val dataEventSink: Sink<DataEvent>
 ) {
     private val _state = MutableStateFlow(
         MoodFormState(
@@ -30,6 +33,7 @@ class MoodFormViewModel(
                 state.emotions.map { it.name }.toSet(),
                 null
             )
+            dataEventSink.emit(DataEvent.UPDATED)
         }
     }
 

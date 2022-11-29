@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import com.github.polydome.data.MoodRepositorySqlite
 import com.github.polydome.ui.calendar.CalendarViewModel
 import com.github.polydome.ui.calendar.MoodCalendar
+import com.github.polydome.ui.event.DataEvent
+import com.github.polydome.ui.event.EventBus
 import com.github.polydome.ui.mood_prompt.MoodFormViewModel
 import com.github.polydome.ui.mood_prompt.MoodPrompt
 import com.github.polydome.ui.settings.NoticesView
@@ -26,11 +28,14 @@ import com.github.polydome.usecase.ReportMood
 fun App() {
     val moodRepository = MoodRepositorySqlite()
     val settingsViewModel = SettingsViewModel(::promptDirectory)
+    val dataEventBus = EventBus<DataEvent>()
     val calendarViewModel = CalendarViewModel(
-        GetScoresBreakdown(moodRepository)
+        GetScoresBreakdown(moodRepository),
+        dataEventBus.events
     )
     val moodFormViewModel = MoodFormViewModel(
-        ReportMood(moodRepository)
+        ReportMood(moodRepository),
+        dataEventBus.sink
     )
 
     MaterialTheme {
