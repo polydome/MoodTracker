@@ -1,9 +1,16 @@
 package com.github.polydome.usecase;
 
 import com.github.polydome.data.MoodRepository;
+import com.github.polydome.model.Emotion;
+import com.github.polydome.model.Mood;
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class ReportMood {
@@ -15,22 +22,32 @@ public class ReportMood {
 
     /**
      * Submits a mood report with a current datetime.
-     * @param score Mood score
+     *
+     * @param score    Mood score
      * @param emotions A set of selected emotions
-     * @param note Optional note
+     * @param note     Optional note
      */
     public void reportCurrentMood(int score,
-                           @NotNull Set<String> emotions,
-                           @Nullable String note) {
-        throw new InternalError("Not implemented");
+                                  @NotNull Set<String> emotions,
+                                  @Nullable String note) {
+
+        List<Emotion> emotionsList = new ArrayList<>();
+        emotions.forEach(emotion -> emotionsList.add(new Emotion(0, emotion)));
+        LocalDateTime currentTimeStamp = LocalDateTime.now();
+        Mood mood = new Mood(0, score, emotionsList, note);
+        moodRepository.insert(currentTimeStamp, mood);
     }
 
     /**
      * Retrieves all emotions that are known to the system
+     *
      * @return A list of emotions.
      */
     @NotNull
     public Set<String> getKnownEmotions() {
-        throw new InternalError("Not implemented");
+        HashSet<String> emotions = new HashSet<>();
+        List<Emotion> emotionList = moodRepository.findReportedEmotions();
+        emotionList.forEach(emotion -> emotions.add(emotion.getName()));
+        return emotions;
     }
 }

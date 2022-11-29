@@ -2,3 +2,5 @@
 build
 /local.properties
 /.idea/uiDesigner.xml
+*.class
+data.db
