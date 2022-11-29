@@ -22,6 +22,7 @@ import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import java.io.File
 import javax.swing.JFileChooser
@@ -36,18 +37,7 @@ enum class Tab {
 @Preview
 fun App() {
     val settingsViewModel = SettingsViewModel(::promptDirectory)
-    val visibleNotices = remember { mutableStateListOf<String>() }
-    val coroutineScope = rememberCoroutineScope()
-
-    coroutineScope.launch {
-        settingsViewModel.notices.collect {
-            visibleNotices.add(it)
-            launch(Dispatchers.Default) {
-                delay(5.seconds)
-                visibleNotices.remove(it)
-            }
-        }
-    }
+    val calendarViewModel = CalendarViewModel()
 
     MaterialTheme {
         Box {
@@ -55,13 +45,13 @@ fun App() {
             SettingsButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd),
-                settingsViewModel
+                settingsViewModel = settingsViewModel
             )
 
             Column(Modifier.padding(64.dp)) {
                 var tab by remember { mutableStateOf(Tab.Button) }
 
-                MoodCalendar(CalendarViewModel())
+                MoodCalendar(calendarViewModel)
 
                 Box {
                     Crossfade(targetState = tab, modifier = Modifier.align(Alignment.Center)) { currentTab ->
@@ -86,21 +76,42 @@ fun App() {
                 }
             }
 
-            LazyColumn (
+            NoticesView(
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                for (notice in visibleNotices) {
-                    item {
-                        Notice(text = notice, onClick = {
-                            visibleNotices.remove(notice)
-                        })
-                    }
+                newNotices = settingsViewModel.notices
+            )
+        }
+    }
+}
 
-                }
+@Composable
+private fun NoticesView(modifier: Modifier = Modifier, newNotices: Flow<String>) {
+    val visibleNotices = remember { mutableStateListOf<String>() }
+    val coroutineScope = rememberCoroutineScope()
+
+    coroutineScope.launch {
+        newNotices.collect {
+            visibleNotices.add(it)
+            launch(Dispatchers.Default) {
+                delay(5.seconds)
+                visibleNotices.remove(it)
             }
+        }
+    }
+
+    LazyColumn (
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        for (notice in visibleNotices) {
+            item {
+                Notice(text = notice, onClick = {
+                    visibleNotices.remove(notice)
+                })
+            }
+
         }
     }
 }
