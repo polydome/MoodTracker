@@ -10,7 +10,6 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'com.j256.ormlite', name: 'ormlite-jdbc', version: '6.1'
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
