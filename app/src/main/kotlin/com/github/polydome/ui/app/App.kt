@@ -21,6 +21,8 @@ import com.github.polydome.ui.settings.SettingsViewModel
 import com.github.polydome.ui.widget.ActionButton
 import com.github.polydome.ui.widget.Header
 import kotlinx.coroutines.launch
+import java.io.File
+import javax.swing.JFileChooser
 
 enum class Tab {
     Button,
@@ -30,7 +32,7 @@ enum class Tab {
 @Composable
 @Preview
 fun App() {
-    val settingsViewModel = SettingsViewModel()
+    val settingsViewModel = SettingsViewModel(::promptDirectory)
     val visibleNotices = remember { mutableStateListOf<String>() }
     val coroutineScope = rememberCoroutineScope()
 
@@ -109,5 +111,16 @@ fun ButtonView(modifier: Modifier = Modifier, switchTab: () -> Unit) {
             onClick = switchTab
         )
     }
+}
+
+private fun promptDirectory(): File {
+    val fileChooser = JFileChooser("/").apply {
+        fileSelectionMode = JFileChooser.DIRECTORIES_ONLY
+        dialogTitle = "Select a folder"
+        approveButtonText = "Select"
+        approveButtonToolTipText = "Select current directory as save destination"
+    }
+    fileChooser.showOpenDialog(null)
+    return fileChooser.selectedFile
 }
 
