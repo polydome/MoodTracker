@@ -14,4 +14,5 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
     implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.24'
     implementation group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.14.1'
+    annotationProcessor 'org.projectlombok:lombok:1.18.24'
 }
