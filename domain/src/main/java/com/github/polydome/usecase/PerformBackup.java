@@ -2,6 +2,10 @@ package com.github.polydome.usecase;
 
 import com.github.polydome.backup.BackupService;
 import com.github.polydome.data.MoodRepository;
+import com.github.polydome.model.MoodEntry;
+
+import java.util.List;
+
 import org.jetbrains.annotations.NotNull;
 
 public class PerformBackup {
@@ -18,6 +22,7 @@ public class PerformBackup {
      * the constructor parameter
      */
     public void execute() {
-        throw new InternalError("Not implemented");
+        List<MoodEntry> listOfAllEntries = moodRepository.findAllEntries();
+        backupService.write(listOfAllEntries);
     }
 }
