@@ -24,39 +24,26 @@ const val LIGHTNESS_BASE = 0.5f
 const val SCORE_LOWEST = 1
 const val SCORE_HIGHEST = 5
 
-fun testWeeks(): Array<Array<Int?>> {
-    return arrayOf(
-        arrayOf(null, null, null, null, 1, 2, 3),
-        arrayOf(4, 5, 6, 7, 8, 9, 10),
-        arrayOf(11, 12, 13, 14, 15, 16, 17),
-        arrayOf(18, 19, 20, 21, 22, 23, 24),
-        arrayOf(25, 26, 27, 28, 29, 30, null),
-    )
-}
-
 @Composable
 @Preview
 fun MoodCalendar(viewModel: CalendarViewModel) {
     val state by viewModel.state.collectAsState()
-    val numbers = (1..state.lastDayOfMonth + 1).toList()
 
     Box(Modifier.fillMaxWidth()) {
         Column(Modifier.align(Alignment.Center)) {
-            testWeeks().forEach { week ->
+            state.weeks.forEach { week ->
                 LazyRow {
                     items(week.size) { dayIndex ->
-                        val index = week[dayIndex]
-
-                        val score = state.dayToMoodScore[index]
+                        val day = week[dayIndex]
                         Card(
                             modifier = Modifier
                                 .padding(6.dp)
                                 .width(60.dp)
                                 .height(60.dp),
                             shape = RoundedCornerShape(8.dp),
-                            elevation = if (index != null) 4.dp else 0.dp
+                            elevation = if (day != null) 4.dp else 0.dp
                         ) {
-                            if (index == null) {
+                            if (day == null) {
                                 return@Card Box(
                                     modifier = Modifier.background(color = Color.LightGray)
                                 )
@@ -64,9 +51,14 @@ fun MoodCalendar(viewModel: CalendarViewModel) {
 
                             Box(
                                 Modifier
-                                    .background(color = score?.let { score -> getMoodScoreColor(score) } ?: Color.Transparent),
+                                    .background(color = getMoodScoreColor(day.value)),
                             ) {
-                                Text(text = " ${numbers[index] - 1}", modifier = Modifier.align(Alignment.Center), fontSize = 24.sp, fontWeight = FontWeight.Light)
+                                Text(
+                                    text = " ${day.number}",
+                                    modifier = Modifier.align(Alignment.Center),
+                                    fontSize = 24.sp,
+                                    fontWeight = FontWeight.Light
+                                )
                             }
                         }
                     }
@@ -78,6 +70,7 @@ fun MoodCalendar(viewModel: CalendarViewModel) {
 }
 
 private fun getMoodScoreColor(score: Int): Color {
-    val hue = (((HUE_HIGHEST - HUE_LOWEST) * (score - SCORE_LOWEST)) / (SCORE_HIGHEST - SCORE_LOWEST)) + HUE_LOWEST
+    val hue =
+        (((HUE_HIGHEST - HUE_LOWEST) * (score - SCORE_LOWEST)) / (SCORE_HIGHEST - SCORE_LOWEST)) + HUE_LOWEST
     return Color.hsl(hue, SATURATION_BASE, LIGHTNESS_BASE)
 }

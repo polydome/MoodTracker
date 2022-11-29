@@ -41,7 +41,7 @@ fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsVie
                 title = "Export to CSV",
                 onClick = {
                     expanded = false
-                    settingsViewModel.exportToCsv()
+//                    settingsViewModel.exportToCsv()
                 }
             )
 
