@@ -39,7 +39,7 @@ public class GetScoresBreakdown {
         List<MoodEntry> entries = moodRepository.findEntriesReportedWithinPeriod(
                 LocalDateTime.of(year, month, 1, 0, 0),
                 LocalDateTime.of(year, month, getLastDayOfMonth(month), 23, 59));
-        for (int day = 0; day < getLastDayOfMonth(month); day++) {
+        for (int day = 1; day <= getLastDayOfMonth(month); day++) {
             final int fDay = day;
             List<MoodEntry> entriesForDay = entries.stream()
                     .filter((moodEntry) -> moodEntry.getDateTime().getDayOfMonth() == fDay).collect(Collectors.toList());
