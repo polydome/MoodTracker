@@ -5,6 +5,6 @@ data class CalendarState(
 ) {
     data class Day(
         val number: Int,
-        val value: Int
+        val value: Int?
     )
 }

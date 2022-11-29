@@ -51,7 +51,7 @@ fun MoodCalendar(viewModel: CalendarViewModel) {
 
                             Box(
                                 Modifier
-                                    .background(color = getMoodScoreColor(day.value)),
+                                    .background(color = if (day.value != null) getMoodScoreColor(day.value) else Color.Transparent),
                             ) {
                                 Text(
                                     text = " ${day.number}",
