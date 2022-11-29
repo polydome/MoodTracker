@@ -11,6 +11,7 @@ import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GetScoresBreakdown {
     private final @NotNull MoodRepository moodRepository;
@@ -41,7 +42,7 @@ public class GetScoresBreakdown {
         for (int day = 0; day < getLastDayOfMonth(month); day++) {
             final int fDay = day;
             List<MoodEntry> entriesForDay = entries.stream()
-                    .filter((moodEntry) -> moodEntry.getDateTime().getDayOfMonth() == fDay).toList();
+                    .filter((moodEntry) -> moodEntry.getDateTime().getDayOfMonth() == fDay).collect(Collectors.toList());
             int DailyScore = 0;
             int avgDailyScore = 0;
             for (MoodEntry entry : entriesForDay) {
