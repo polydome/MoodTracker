@@ -22,7 +22,6 @@ public class RestoreBackup {
      * The retrieved data is merged onto the existing data.
      */
     public void execute() {
-        //backup read, na bazie odpalić merge
         List<MoodEntry> backupEntries = backupService.read();
         moodRepository.merge(backupEntries);
     }
