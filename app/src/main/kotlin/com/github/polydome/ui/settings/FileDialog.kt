@@ -1,4 +1,4 @@
-package com.github.polydome.ui.home
+package com.github.polydome.ui.settings
 
 import java.io.File
 import javax.swing.JFileChooser

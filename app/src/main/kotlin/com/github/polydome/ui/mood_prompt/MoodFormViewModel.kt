@@ -4,14 +4,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MoodPromptViewModel {
+class MoodFormViewModel {
     private val _state = MutableStateFlow(
-        MoodPromptState(
+        MoodFormState(
             emotions = placeholderEmotions(),
             value = null
         )
     )
-    val state: StateFlow<MoodPromptState> = _state.asStateFlow()
+    val state: StateFlow<MoodFormState> = _state.asStateFlow()
 
     fun selectMoodValue(value: Int) {
         _state.value = _state.value.copy(
@@ -36,7 +36,7 @@ class MoodPromptViewModel {
 
     fun addEmotion(emotionName: String) {
         _state.value = _state.value.copy(
-            emotions = _state.value.emotions + MoodPromptState.Emotion(
+            emotions = _state.value.emotions + MoodFormState.Emotion(
                 name = emotionName,
                 selected = false
             )
@@ -45,8 +45,8 @@ class MoodPromptViewModel {
 }
 
 private fun placeholderEmotions() = listOf(
-    MoodPromptState.Emotion("Anger", false),
-    MoodPromptState.Emotion("Happiness", false),
-    MoodPromptState.Emotion("Sadness", false),
-    MoodPromptState.Emotion("Richness", false),
+    MoodFormState.Emotion("Anger", false),
+    MoodFormState.Emotion("Happiness", false),
+    MoodFormState.Emotion("Sadness", false),
+    MoodFormState.Emotion("Richness", false),
 )

@@ -1,6 +1,6 @@
 package com.github.polydome.ui.mood_prompt
 
-data class MoodPromptState(
+data class MoodFormState(
     val value: Int?,
     val emotions: List<Emotion>,
 ) {

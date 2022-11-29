@@ -11,14 +11,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.github.polydome.ui.calendar.CalendarViewModel
 import com.github.polydome.ui.calendar.MoodCalendar
+import com.github.polydome.ui.mood_prompt.MoodFormViewModel
+import com.github.polydome.ui.mood_prompt.MoodPrompt
+import com.github.polydome.ui.settings.NoticesView
 import com.github.polydome.ui.settings.SettingsButton
 import com.github.polydome.ui.settings.SettingsViewModel
+import com.github.polydome.ui.settings.promptDirectory
 
 @Composable
 @Preview
 fun App() {
     val settingsViewModel = SettingsViewModel(::promptDirectory)
     val calendarViewModel = CalendarViewModel()
+    val moodFormViewModel = MoodFormViewModel()
 
     MaterialTheme {
         Box {
@@ -30,7 +35,7 @@ fun App() {
 
             Column(Modifier.padding(64.dp)) {
                 MoodCalendar(calendarViewModel)
-                MoodForm()
+                MoodPrompt(moodFormViewModel)
             }
 
             NoticesView(
