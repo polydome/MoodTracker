@@ -13,7 +13,7 @@ class MoodFormViewModel(
 ) {
     private val _state = MutableStateFlow(
         MoodFormState(
-            emotions = placeholderEmotions(),
+            emotions = reportMood.knownEmotions.toEmotions(),
             value = null
         )
     )
@@ -30,7 +30,10 @@ class MoodFormViewModel(
         if (state.value != null) {
             reportMood.reportCurrentMood(
                 state.value,
-                state.emotions.map { it.name }.toSet(),
+                state.emotions
+                    .filter { it.selected }
+                    .map { it.name }
+                    .toSet(),
                 null
             )
             dataEventSink.emit(DataEvent.UPDATED)
@@ -57,6 +60,8 @@ class MoodFormViewModel(
         )
     }
 }
+
+private fun Set<String>.toEmotions() = map { MoodFormState.Emotion(it, false) }.sortedBy { it.name }
 
 private fun placeholderEmotions() = listOf(
     MoodFormState.Emotion("Anger", false),
