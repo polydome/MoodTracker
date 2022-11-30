@@ -25,11 +25,10 @@ class SettingsViewModel(
         )
 
         val filePath = "$directory/mood_tracker_backup_$currentDateTime.json"
-        coroutineScope.launch {
-            _notices.emit("Exported to $filePath")
-        }
 
         jsonBackupFactory.createPerformBackup(filePath).execute()
+
+        showNotice("Exported to $filePath")
     }
 
     fun importFromJson() {
@@ -38,10 +37,18 @@ class SettingsViewModel(
         jsonBackupFactory
             .createRestoreBackup(file.path)
             .execute()
+
+        showNotice("Imported from ${file.path}")
     }
 
     fun exportToGoogleDrive() {
 
+    }
+
+    private fun showNotice(message: String) {
+        coroutineScope.launch {
+            _notices.emit(message)
+        }
     }
 }
 
