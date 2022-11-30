@@ -69,7 +69,10 @@ fun MoodForm(
                 .width(240.dp)
         ) {
             ActionButton(onClick = switchTab, icon = Icons.Filled.Close)
-            ActionButton(onClick = viewModel::submitPrompt, icon = Icons.Filled.Done)
+            ActionButton(onClick = {
+                viewModel.submitPrompt()
+                switchTab()
+            }, icon = Icons.Filled.Done)
         }
     }
 }
