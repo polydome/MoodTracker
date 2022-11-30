@@ -64,10 +64,15 @@ fun App() {
                 )
             }
 
+            SettingsButton(
+                modifier = Modifier
+                    .align(Alignment.TopEnd),
+                settingsViewModel = settingsViewModel
+            )
+
             NoticesView(
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .padding(12.dp),
+                    .align(Alignment.BottomEnd),
                 newNotices = settingsViewModel.notices
             )
         }
