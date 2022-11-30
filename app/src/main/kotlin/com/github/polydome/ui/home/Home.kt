@@ -27,12 +27,14 @@ import com.github.polydome.usecase.ReportMood
 fun App() {
     val moodRepository = MoodRepositorySqlite()
     val jsonBackupFactory = JsonBackupFactory(moodRepository)
+    val googleDriveBackupFactory = GoogleDriveBackupFactory(moodRepository)
     val dataEventBus = EventBus<DataEvent>()
     val settingsViewModel = SettingsViewModel(
         promptDirectory = ::promptDirectory,
         promptFile = ::promptJson,
         jsonBackupFactory = jsonBackupFactory,
-        dataEventSink = dataEventBus.sink
+        dataEventSink = dataEventBus.sink,
+        googleDriveBackupFactory = googleDriveBackupFactory
     )
     val calendarViewModel = CalendarViewModel(
         GetScoresBreakdown(moodRepository),

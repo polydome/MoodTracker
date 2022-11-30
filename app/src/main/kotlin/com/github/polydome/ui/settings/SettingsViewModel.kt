@@ -15,6 +15,7 @@ class SettingsViewModel(
     private val promptDirectory: () -> File,
     private val promptFile: () -> File,
     private val jsonBackupFactory: BackupFactory,
+    private val googleDriveBackupFactory: BackupFactory,
     private val dataEventSink: Sink<DataEvent>
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -57,7 +58,15 @@ class SettingsViewModel(
     }
 
     fun exportToGoogleDrive() {
+        coroutineScope.launch {
+            showNotice("Exporting...")
 
+            googleDriveBackupFactory
+                .createPerformBackup("./MoodBackup.json")
+                .execute()
+
+            showNotice("Exported to Google Drive")
+        }
     }
 
     private fun showNotice(message: String) {
