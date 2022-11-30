@@ -213,7 +213,7 @@ public class GoogleDriveBackupService implements BackupService {
             String pageToken = null;
             do {
               FileList result = service.files().list()
-                  .setQ("mimeType='application/json' and name='MoodBackup.json'")
+                  .setQ("mimeType='application/json' and name='MoodBackup.json' and trashed=false")
                   .setSpaces("drive")
                   .setFields("nextPageToken, files(id, name)")
                   .setPageToken(pageToken)
@@ -250,5 +250,3 @@ public class GoogleDriveBackupService implements BackupService {
 
 
 }
-
-
