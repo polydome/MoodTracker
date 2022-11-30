@@ -44,13 +44,14 @@ class CalendarViewModel(
                 else if (cell > lastDayOfMonth) null
                 else {
                     val dayNumber = cell - skippedDays + 1
-                    val value = breakdown[dayNumber]?.let {
+                    val value = breakdown[dayNumber]?.lastScore?.let {
                         if (it == 0) null
                         else it
                     }
                     CalendarState.Day(
                         number = dayNumber,
-                        value = value
+                        value = value,
+                        emotions = breakdown[dayNumber]?.emotions ?: emptyList()
                     )
                 }
             }.toTypedArray()
