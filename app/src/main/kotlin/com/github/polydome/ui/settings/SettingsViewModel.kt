@@ -1,5 +1,7 @@
 package com.github.polydome.ui.settings
 
+import com.github.polydome.ui.event.DataEvent
+import com.github.polydome.ui.event.Sink
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,7 @@ class SettingsViewModel(
     private val promptDirectory: () -> File,
     private val promptFile: () -> File,
     private val jsonBackupFactory: BackupFactory,
+    private val dataEventSink: Sink<DataEvent>
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     private val _notices = MutableSharedFlow<String>()
@@ -38,6 +41,7 @@ class SettingsViewModel(
             .createRestoreBackup(file.path)
             .execute()
 
+        dataEventSink.emit(DataEvent.UPDATED)
         showNotice("Imported from ${file.path}")
     }
 
