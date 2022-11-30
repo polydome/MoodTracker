@@ -16,10 +16,7 @@ import com.github.polydome.ui.event.DataEvent
 import com.github.polydome.ui.event.EventBus
 import com.github.polydome.ui.mood_prompt.MoodFormViewModel
 import com.github.polydome.ui.mood_prompt.MoodPrompt
-import com.github.polydome.ui.settings.NoticesView
-import com.github.polydome.ui.settings.SettingsButton
-import com.github.polydome.ui.settings.SettingsViewModel
-import com.github.polydome.ui.settings.promptDirectory
+import com.github.polydome.ui.settings.*
 import com.github.polydome.usecase.GetScoresBreakdown
 import com.github.polydome.usecase.ReportMood
 
@@ -27,7 +24,8 @@ import com.github.polydome.usecase.ReportMood
 @Preview
 fun App() {
     val moodRepository = MoodRepositorySqlite()
-    val settingsViewModel = SettingsViewModel(::promptDirectory)
+    val jsonBackupFactory = JsonBackupFactory(moodRepository)
+    val settingsViewModel = SettingsViewModel(::promptDirectory, jsonBackupFactory)
     val dataEventBus = EventBus<DataEvent>()
     val calendarViewModel = CalendarViewModel(
         GetScoresBreakdown(moodRepository),
