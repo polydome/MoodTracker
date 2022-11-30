@@ -1,6 +1,5 @@
 package com.github.polydome.ui.settings
 
-import com.github.polydome.usecase.PerformBackup
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,6 +11,7 @@ import java.time.format.DateTimeFormatter
 
 class SettingsViewModel(
     private val promptDirectory: () -> File,
+    private val promptFile: () -> File,
     private val jsonBackupFactory: BackupFactory,
 ) {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
@@ -29,7 +29,15 @@ class SettingsViewModel(
             _notices.emit("Exported to $filePath")
         }
 
-        jsonBackupFactory.create(filePath).execute()
+        jsonBackupFactory.createPerformBackup(filePath).execute()
+    }
+
+    fun importFromJson() {
+        val file = promptFile()
+
+        jsonBackupFactory
+            .createRestoreBackup(file.path)
+            .execute()
     }
 
     fun exportToGoogleDrive() {

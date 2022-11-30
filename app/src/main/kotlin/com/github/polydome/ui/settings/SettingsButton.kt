@@ -44,6 +44,14 @@ fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsVie
                     settingsViewModel.exportToGoogleDrive()
                 }
             )
+
+            SettingsItem(
+                title = "Import from JSON",
+                onClick = {
+                    expanded = false
+                    settingsViewModel.importFromJson()
+                }
+            )
         }
     }
 }
