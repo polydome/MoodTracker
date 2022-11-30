@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -24,7 +25,8 @@ fun Notice(modifier: Modifier = Modifier, text: String, type: NoticeType = Notic
         onClick = onClick
     ) {
         Column(
-            Modifier.width(IntrinsicSize.Max)
+            Modifier.width(IntrinsicSize.Max),
+            horizontalAlignment = Alignment.End
         ) {
             Box(modifier = Modifier.background(type.primaryColor).height(6.dp).fillMaxWidth())
             Row(

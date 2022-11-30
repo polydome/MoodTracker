@@ -1,13 +1,19 @@
 package com.github.polydome.ui.mood_prompt
 
+import com.github.polydome.ui.event.DataEvent
+import com.github.polydome.ui.event.Sink
+import com.github.polydome.usecase.ReportMood
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class MoodFormViewModel {
+class MoodFormViewModel(
+    private val reportMood: ReportMood,
+    private val dataEventSink: Sink<DataEvent>
+) {
     private val _state = MutableStateFlow(
         MoodFormState(
-            emotions = placeholderEmotions(),
+            emotions = reportMood.knownEmotions.toEmotions(),
             value = null
         )
     )
@@ -20,7 +26,18 @@ class MoodFormViewModel {
     }
 
     fun submitPrompt() {
-        println("Submitting prompt with value = ${_state.value.value}")
+        val state = _state.value
+        if (state.value != null) {
+            reportMood.reportCurrentMood(
+                state.value,
+                state.emotions
+                    .filter { it.selected }
+                    .map { it.name }
+                    .toSet(),
+                null
+            )
+            dataEventSink.emit(DataEvent.UPDATED)
+        }
     }
 
     fun toggleEmotion(emotionIndex: Int) {
@@ -43,6 +60,8 @@ class MoodFormViewModel {
         )
     }
 }
+
+private fun Set<String>.toEmotions() = map { MoodFormState.Emotion(it, false) }.sortedBy { it.name }
 
 private fun placeholderEmotions() = listOf(
     MoodFormState.Emotion("Anger", false),

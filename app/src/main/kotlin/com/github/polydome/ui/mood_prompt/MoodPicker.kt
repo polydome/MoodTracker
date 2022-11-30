@@ -22,7 +22,7 @@ fun MoodPicker(onMoodPicked: (value: Int) -> Unit) {
             MoodButton(
                 onClick = {
                     selectedMoodIndex = index
-                    onMoodPicked(index)
+                    onMoodPicked(moodLevel.value)
                 },
                 icon = moodLevel.icon,
                 selected = selectedMoodIndex == index
@@ -42,11 +42,11 @@ private data class MoodLevel(
     companion object {
         val all: Array<MoodLevel>
             get() = arrayOf(
-                MoodLevel(0, MoodIcons.Mood0),
-                MoodLevel(1, MoodIcons.Mood1),
-                MoodLevel(2, MoodIcons.Mood2),
-                MoodLevel(3, MoodIcons.Mood3),
-                MoodLevel(4, MoodIcons.Mood4),
+                MoodLevel(1, MoodIcons.Mood0),
+                MoodLevel(2, MoodIcons.Mood1),
+                MoodLevel(3, MoodIcons.Mood2),
+                MoodLevel(4, MoodIcons.Mood3),
+                MoodLevel(5, MoodIcons.Mood4),
             )
     }
 }

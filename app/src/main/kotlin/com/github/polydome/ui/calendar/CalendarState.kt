@@ -5,6 +5,10 @@ data class CalendarState(
 ) {
     data class Day(
         val number: Int,
-        val value: Int?
+        val emotions: List<String>,
+        val lowestMood: Int?,
+        val highestMood: Int?,
+        val averageMood: Int?,
+        val lastMood: Int?
     )
 }

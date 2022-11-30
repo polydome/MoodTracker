@@ -39,7 +39,7 @@ fun MoodForm(
         )
 
         Spacer(
-            modifier = Modifier.height(32.dp)
+            modifier = Modifier.height(16.dp)
         )
 
         Header("Select your emotions")
@@ -60,7 +60,7 @@ fun MoodForm(
         )
 
         Spacer(
-            modifier = Modifier.height(64.dp)
+            modifier = Modifier.height(30.dp)
         )
 
         Row(
@@ -69,7 +69,10 @@ fun MoodForm(
                 .width(240.dp)
         ) {
             ActionButton(onClick = switchTab, icon = Icons.Filled.Close)
-            ActionButton(onClick = viewModel::submitPrompt, icon = Icons.Filled.Done)
+            ActionButton(onClick = {
+                viewModel.submitPrompt()
+                switchTab()
+            }, icon = Icons.Filled.Done)
         }
     }
 }
