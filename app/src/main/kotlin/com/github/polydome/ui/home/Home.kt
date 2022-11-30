@@ -4,6 +4,8 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -49,9 +51,15 @@ fun App() {
                 settingsViewModel = settingsViewModel
             )
 
-            Column(Modifier.padding(64.dp)) {
+            Column(Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(64.dp)
+            ) {
                 MoodCalendar(calendarViewModel)
-                MoodPrompt(moodFormViewModel)
+                MoodPrompt(
+                    modifier = Modifier.padding(top = 60.dp),
+                    moodFormViewModel = moodFormViewModel
+                )
             }
 
             NoticesView(

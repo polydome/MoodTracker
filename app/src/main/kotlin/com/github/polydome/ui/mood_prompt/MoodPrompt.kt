@@ -19,8 +19,10 @@ private enum class Tab {
 }
 
 @Composable
-fun MoodPrompt(moodFormViewModel: MoodFormViewModel) {
-    Box {
+fun MoodPrompt(modifier: Modifier = Modifier, moodFormViewModel: MoodFormViewModel) {
+    Box(
+        modifier = modifier
+    ) {
         var tab by remember { mutableStateOf(Tab.Button) }
 
         Crossfade(
