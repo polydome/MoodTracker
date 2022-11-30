@@ -1,19 +1,19 @@
 package com.github.polydome.ui.settings
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 
 @Composable
 fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsViewModel) {
     var expanded by remember { mutableStateOf(false) }
 
-    Box(modifier = modifier.padding(12.dp)) {
+    Box(
+        modifier = modifier
+    ) {
         IconButton(
             onClick = {
                 expanded = !expanded
@@ -38,6 +38,14 @@ fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsVie
             )
 
             SettingsItem(
+                title = "Import from JSON",
+                onClick = {
+                    expanded = false
+                    settingsViewModel.importFromJson()
+                }
+            )
+
+            SettingsItem(
                 title = "Export to Google Drive",
                 onClick = {
                     expanded = false
@@ -46,10 +54,10 @@ fun SettingsButton(modifier: Modifier = Modifier, settingsViewModel: SettingsVie
             )
 
             SettingsItem(
-                title = "Import from JSON",
+                title = "Import from GoogleDrive",
                 onClick = {
                     expanded = false
-                    settingsViewModel.importFromJson()
+                    settingsViewModel.importFromGoogleDrive()
                 }
             )
         }

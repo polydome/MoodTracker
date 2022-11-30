@@ -69,6 +69,18 @@ class SettingsViewModel(
         }
     }
 
+    fun importFromGoogleDrive() {
+        coroutineScope.launch {
+            showNotice("Importing...")
+
+            googleDriveBackupFactory
+                .createRestoreBackup("./MoodBackup.json")
+                .execute()
+
+            showNotice("Imported from Google Drive")
+        }
+    }
+
     private fun showNotice(message: String) {
         coroutineScope.launch {
             _notices.emit(message)

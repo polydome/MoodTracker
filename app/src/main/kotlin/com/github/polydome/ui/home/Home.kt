@@ -3,6 +3,7 @@ package com.github.polydome.ui.home
 import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -46,7 +47,11 @@ fun App() {
     )
 
     MaterialTheme {
-        Box {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(12.dp)
+        ) {
             SettingsButton(
                 modifier = Modifier
                     .align(Alignment.TopEnd),
