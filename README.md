@@ -13,15 +13,20 @@ Elektroniczny dziennik nastroju
 
 #### domain
 Wystawia interfejs pozwalający na realizację przypadków użycia.
+Wykonał Jakub Dubrowski
 
 #### data
 Implementuje usługę realizującą operacje na danych.
+Wykonał Rafał Cisek
 
 #### local-backup
 Implementuje usługę realizującą import/eksport do pliku JSON/CSV.
+Wykonał Dawid Drzewiecki
 
 #### remote-backup
 Implementuje usługę realizującą import/eksport na Dysk Google
+Wykonała Gabriela Błaszczak
 
 #### app
 Interfejs graficzny uruchamiający przypadki użycia i prezentujący ich wynik.
+Wykonał Łukasz Burzak
